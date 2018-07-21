@@ -26,6 +26,7 @@ class DownLoader(c: Context, urlAddress: String, lv: ListView) : AsyncTask<Void,
         pd = ProgressDialog(c)
         pd.setTitle("Fetch Articles")
         pd.setMessage("Fetching...Please wait")
+        pd.show()
     }
 
     override fun doInBackground(vararg p0: Void?): Any? {
@@ -38,7 +39,7 @@ class DownLoader(c: Context, urlAddress: String, lv: ListView) : AsyncTask<Void,
         if(result.toString().startsWith("Error")){
             Toast.makeText(c, result.toString(), Toast.LENGTH_SHORT).show()
         } else{
-
+            RSSParser(c,result as InputStream, lv).execute()
         }
     }
 

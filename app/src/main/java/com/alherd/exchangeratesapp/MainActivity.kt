@@ -1,10 +1,9 @@
 package com.alherd.exchangeratesapp
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ListView
-import butterknife.BindView
-import butterknife.ButterKnife
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.alherd.exchangeratesapp.rss.DownLoader
 
 class MainActivity : AppCompatActivity() {
@@ -12,14 +11,15 @@ class MainActivity : AppCompatActivity() {
         val URL_ADDRESS: String = "http://www.nbrb.by/Services/XmlExRates.aspx"
     }
 
- //   @BindView(R.id.lv)
-    lateinit var lv: ListView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_main)
+        val recyclerView: RecyclerView = findViewById(R.id.recycler);
+        val linearLayoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = linearLayoutManager
+        DownLoader(this, URL_ADDRESS, recyclerView).execute()
 
-        lv = findViewById(R.id.lv)
-        DownLoader(this, URL_ADDRESS, lv).execute()
+
     }
+
 }

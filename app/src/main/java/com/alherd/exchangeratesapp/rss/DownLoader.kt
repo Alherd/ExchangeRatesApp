@@ -1,10 +1,9 @@
 package com.alherd.exchangeratesapp.rss
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Context
 import android.os.AsyncTask
-import android.widget.ListView
+import android.support.v7.widget.RecyclerView
 import android.widget.Toast
 import java.io.BufferedInputStream
 import java.io.IOException
@@ -14,11 +13,11 @@ import java.net.HttpURLConnection
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class DownLoader(c: Context, urlAddress: String, lv: ListView) : AsyncTask<Void, Void, Any>() {
+class DownLoader(c: Activity, urlAddress: String, lv: RecyclerView) : AsyncTask<Void, Void, Any>() {
 
-    private var c: Context = c
+    private var c: Activity = c
     private var urlAddress: String = urlAddress
-    private var lv: ListView = lv
+    private var lv: RecyclerView = lv
     private lateinit var pd: ProgressDialog
 
     override fun onPreExecute() {
@@ -36,10 +35,10 @@ class DownLoader(c: Context, urlAddress: String, lv: ListView) : AsyncTask<Void,
     override fun onPostExecute(result: Any?) {
         super.onPostExecute(result)
         pd.dismiss()
-        if(result.toString().startsWith("Error")){
+        if (result.toString().startsWith("Error")) {
             Toast.makeText(c, result.toString(), Toast.LENGTH_SHORT).show()
-        } else{
-            RSSParser(c,result as InputStream, lv).execute()
+        } else {
+            RSSParser(c, result as InputStream, lv).execute()
         }
     }
 

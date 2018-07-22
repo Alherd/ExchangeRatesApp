@@ -1,28 +1,31 @@
 package com.alherd.exchangeratesapp.rss
 
+import android.app.Activity
 import android.app.ProgressDialog
-import android.content.Context
 import android.os.AsyncTask
-import android.widget.ListView
+import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.widget.Toast
-import com.alherd.exchangeratesapp.data_objects.Article
-import com.alherd.exchangeratesapp.ui.CustomAdapter
+import com.alherd.exchangeratesapp.BR
+import com.alherd.exchangeratesapp.model.Rate
+import com.alherd.exchangeratesapp.ui.ResAdapter
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 
+
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class RSSParser(c: Context, inputStream: InputStream, lv: ListView) : AsyncTask<Void, Void, Boolean>() {
+class RSSParser(c: Activity, inputStream: InputStream, lv: RecyclerView) : AsyncTask<Void, Void, Boolean>() {
 
-    private var c: Context = c
+    private var c: Activity = c
     private var inputStream: InputStream = inputStream
-    private var lv: ListView = lv
+    private var lv: RecyclerView = lv
 
     private lateinit var pd: ProgressDialog
-    private var articles: ArrayList<Article> = ArrayList<Article>()
+    private var mRates: ArrayList<Rate> = ArrayList<Rate>()
 
     override fun onPreExecute() {
         super.onPreExecute()
@@ -40,7 +43,10 @@ class RSSParser(c: Context, inputStream: InputStream, lv: ListView) : AsyncTask<
         super.onPostExecute(result)
         pd.dismiss()
         if (result) {
-            lv.adapter = CustomAdapter(c, articles)
+            val resAdapter: ResAdapter = ResAdapter(c, mRates, BR.rate)
+            lv.adapter = resAdapter
+            resAdapter.notifyDataSetChanged()
+            Log.d("w", "a")
         } else {
             Toast.makeText(c, "Unable to parse", Toast.LENGTH_SHORT).show()
         }
@@ -58,8 +64,8 @@ class RSSParser(c: Context, inputStream: InputStream, lv: ListView) : AsyncTask<
             var tagValue: String? = null
             var isSiteMeta: Boolean = true
 
-            articles.clear()
-            var article: Article? = Article()
+            mRates.clear()
+            var rate: Rate? = Rate()
 
             do {
                 var tagname: String? = parser.name
@@ -67,7 +73,7 @@ class RSSParser(c: Context, inputStream: InputStream, lv: ListView) : AsyncTask<
                 when (event) {
                     XmlPullParser.START_TAG ->
                         if (tagname.equals("Currency")) {
-                            article = Article()
+                            rate = Rate()
                             isSiteMeta = false
                         }
                     XmlPullParser.TEXT ->
@@ -75,12 +81,12 @@ class RSSParser(c: Context, inputStream: InputStream, lv: ListView) : AsyncTask<
                     XmlPullParser.END_TAG -> {
                         if (!isSiteMeta) {
                             if (tagname.equals("Name")) {
-                                article?.name = tagValue!!
-                            //    articles.add(article!!);
+                                rate?.name = tagValue!!
+                                //    mRates.add(rate!!);
                             }
                         }
                         if (tagname.equals("Currency")) {
-                            articles.add(article!!);
+                            mRates.add(rate!!);
                             isSiteMeta = true;
                         }
                     }

@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_main)
-        val recyclerView: RecyclerView = findViewById(R.id.recycler);
+        val recyclerView: RecyclerView = findViewById(R.id.recycler)
         val linearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManager
         DownLoader(this, URL_ADDRESS, recyclerView).execute()

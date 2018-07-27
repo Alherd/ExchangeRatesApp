@@ -37,7 +37,7 @@ class ResAdapter(c: Activity, rates: ArrayList<Rate>, variableId: Int) : Recycle
         val binding: ViewDataBinding
 
         init {
-            binding = DataBindingUtil.bind(v)
+            binding = DataBindingUtil.bind(v)!!
         }
     }
 }

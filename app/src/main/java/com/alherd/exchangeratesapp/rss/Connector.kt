@@ -10,9 +10,9 @@ import java.net.URL
  */
 class Connector {
     companion object {
-        fun connect(urlAdress: String): Any {
+        fun connect(urlAddress: String): Any {
             try {
-                var url: URL = URL(urlAdress)
+                var url: URL = URL(urlAddress)
                 var con: HttpURLConnection = url.openConnection() as HttpURLConnection
                 con.requestMethod = "GET"
                 con.connectTimeout = 15000
@@ -25,7 +25,7 @@ class Connector {
                 return ErrorTraker.WRONG_URL_FORMAT
             } catch (e: IOException) {
                 e.printStackTrace()
-                return ErrorTraker.IO_ERROR
+                return ErrorTraker.CONNECTION_ERROR
             }
         }
     }

@@ -1,6 +1,6 @@
-package com.alherd.exchangeratesapp.ui
+package com.alherd.exchangeratesapp.adapter
 
-import android.app.Activity
+import android.content.Context
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.support.v7.widget.RecyclerView
@@ -10,12 +10,11 @@ import android.view.ViewGroup
 import com.alherd.exchangeratesapp.R
 import com.alherd.exchangeratesapp.model.Rate
 
-
 /**
  * Created by Olgerd on 22.07.2018.
  */
-class ResAdapter(c: Activity, rates: ArrayList<Rate>, variableId: Int) : RecyclerView.Adapter<ResAdapter.ResHolder>() {
-    private var c: Activity = c
+class ResAdapter(c: Context, rates: ArrayList<Rate>, variableId: Int) : RecyclerView.Adapter<ResAdapter.ResHolder>() {
+    private var c: Context = c
     private var mRates: ArrayList<Rate> = rates
     private var variableId: Int = variableId
 
@@ -28,7 +27,7 @@ class ResAdapter(c: Activity, rates: ArrayList<Rate>, variableId: Int) : Recycle
         return mRates.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResAdapter.ResHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResHolder {
         val view: View = LayoutInflater.from(parent.context).inflate(R.layout.model, parent, false)
         return ResHolder(view)
     }

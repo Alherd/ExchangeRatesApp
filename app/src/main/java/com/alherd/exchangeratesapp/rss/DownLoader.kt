@@ -2,6 +2,7 @@ package com.alherd.exchangeratesapp.rss
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.AsyncTask
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
@@ -14,9 +15,9 @@ import java.net.HttpURLConnection
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class DownLoader(c: Activity, urlAddress: String, lv: ContentMainBinding) : AsyncTask<Void, Void, Any>() {
+class DownLoader(c: Context, urlAddress: String, lv: ContentMainBinding) : AsyncTask<Void, Void, Any>() {
 
-    private var c: Activity = c
+    private var c: Context = c
     private var urlAddress: String = urlAddress
     private var lv: ContentMainBinding = lv
     private lateinit var pd: ProgressDialog

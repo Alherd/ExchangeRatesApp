@@ -1,15 +1,14 @@
 package com.alherd.exchangeratesapp.rss
 
-import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Context
 import android.os.AsyncTask
-import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.alherd.exchangeratesapp.BR
 import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import com.alherd.exchangeratesapp.model.Rate
-import com.alherd.exchangeratesapp.ui.ResAdapter
+import com.alherd.exchangeratesapp.adapter.ResAdapter
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
@@ -18,9 +17,9 @@ import java.io.InputStream
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class RSSParser(c: Activity, inputStream: InputStream, lv: ContentMainBinding) : AsyncTask<Void, Void, Boolean>() {
+class RSSParser(c: Context, inputStream: InputStream, lv: ContentMainBinding) : AsyncTask<Void, Void, Boolean>() {
 
-    private var c: Activity = c
+    private var c: Context = c
     private var inputStream: InputStream = inputStream
     private var lv: ContentMainBinding = lv
 

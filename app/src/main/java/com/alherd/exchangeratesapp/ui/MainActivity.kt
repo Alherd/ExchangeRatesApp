@@ -1,9 +1,10 @@
-package com.alherd.exchangeratesapp
+package com.alherd.exchangeratesapp.ui
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import com.alherd.exchangeratesapp.R
 import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import com.alherd.exchangeratesapp.rss.DownLoader
 

@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.os.AsyncTask
 import android.support.v7.widget.RecyclerView
 import android.widget.Toast
+import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -13,11 +14,11 @@ import java.net.HttpURLConnection
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class DownLoader(c: Activity, urlAddress: String, lv: RecyclerView) : AsyncTask<Void, Void, Any>() {
+class DownLoader(c: Activity, urlAddress: String, lv: ContentMainBinding) : AsyncTask<Void, Void, Any>() {
 
     private var c: Activity = c
     private var urlAddress: String = urlAddress
-    private var lv: RecyclerView = lv
+    private var lv: ContentMainBinding = lv
     private lateinit var pd: ProgressDialog
 
     override fun onPreExecute() {

@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.alherd.exchangeratesapp.BR
+import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import com.alherd.exchangeratesapp.model.Rate
 import com.alherd.exchangeratesapp.ui.ResAdapter
 import org.xmlpull.v1.XmlPullParser
@@ -14,15 +15,14 @@ import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
 
-
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class RSSParser(c: Activity, inputStream: InputStream, lv: RecyclerView) : AsyncTask<Void, Void, Boolean>() {
+class RSSParser(c: Activity, inputStream: InputStream, lv: ContentMainBinding) : AsyncTask<Void, Void, Boolean>() {
 
     private var c: Activity = c
     private var inputStream: InputStream = inputStream
-    private var lv: RecyclerView = lv
+    private var lv: ContentMainBinding = lv
 
     private lateinit var pd: ProgressDialog
     private var mRates: ArrayList<Rate> = ArrayList<Rate>()
@@ -43,8 +43,9 @@ class RSSParser(c: Activity, inputStream: InputStream, lv: RecyclerView) : Async
         super.onPostExecute(result)
         pd.dismiss()
         if (result) {
-            val resAdapter: ResAdapter = ResAdapter(c, mRates, BR.rate)
-            lv.adapter = resAdapter
+            val resAdapter = ResAdapter(c, mRates, BR.rate)
+
+            lv.recycler.adapter = resAdapter
             resAdapter.notifyDataSetChanged()
             Log.d("w", "a")
         } else {

@@ -25,7 +25,7 @@ class Connector {
                 return ErrorTraker.WRONG_URL_FORMAT
             } catch (e: IOException) {
                 e.printStackTrace()
-                return ErrorTraker.CONNECTION_ERROR
+                return ErrorTraker.IO_ERROR
             }
         }
     }

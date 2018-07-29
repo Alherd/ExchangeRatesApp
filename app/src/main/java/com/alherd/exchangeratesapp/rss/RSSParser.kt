@@ -6,21 +6,30 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.AsyncTask
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.widget.Toast
 import com.alherd.exchangeratesapp.BR
 import com.alherd.exchangeratesapp.R
 import com.alherd.exchangeratesapp.adapter.ResAdapter
 import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import com.alherd.exchangeratesapp.model.Rate
+import com.alherd.exchangeratesapp.ui.MainActivity
+import io.reactivex.Observable
+import io.reactivex.ObservableSource
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
+import java.util.concurrent.Callable
 
 /**
  * Created by Olgerd on 21.07.2018.
  */
-class RSSParser(c: Context, inputStream: InputStream) : AsyncTask<Void, Void, Boolean>() {
+class RSSParser(c: Context, inputStream: InputStream) {
 
     private var c: Context = c
     private var inputStream: InputStream = inputStream
@@ -28,21 +37,48 @@ class RSSParser(c: Context, inputStream: InputStream) : AsyncTask<Void, Void, Bo
     private lateinit var pd: ProgressDialog
     private var mRates: ArrayList<Rate> = ArrayList<Rate>()
 
-    override fun onPreExecute() {
-        super.onPreExecute()
+    fun rssParse() {
+       changeProgressDialog()
+
+        createObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object : Observer<Boolean> {
+
+                    override fun onSubscribe(d: Disposable?) {
+                        Log.d(MainActivity.TAG, "onSubscribe: $d")
+                    }
+
+                    override fun onNext(value: Boolean) {
+                        getAdapter(value)
+                    }
+
+                    override fun onError(e: Throwable?) {
+                        Log.e(MainActivity.TAG, "onError: ", e)
+                    }
+
+                    override fun onComplete() {
+                        pd.dismiss()
+                        Log.d(MainActivity.TAG, "onComplete: ")
+                    }
+                })
+    }
+
+    private fun changeProgressDialog(){
         pd = ProgressDialog(c)
         pd.setTitle("Parse RSS")
         pd.setMessage("Parsing...Please wait")
         pd.show()
     }
-
-    override fun doInBackground(vararg p0: Void?): Boolean {
-        return this.parseRSS()
+    private fun createObservable(): Observable<Boolean> {
+        return Observable.defer(object : Callable<ObservableSource<Boolean>> {
+            override fun call(): ObservableSource<Boolean>? {
+                return Observable.just(parseRSS())
+            }
+        })
     }
 
-    override fun onPostExecute(result: Boolean) {
-        super.onPostExecute(result)
-        pd.dismiss()
+    private fun getAdapter(result: Boolean) {
         if (result) {
             val resAdapter = ResAdapter(c, mRates, BR.rateviewmodel)
             val linearLayoutManager = LinearLayoutManager(c)

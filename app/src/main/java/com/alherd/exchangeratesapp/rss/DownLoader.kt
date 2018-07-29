@@ -2,7 +2,9 @@ package com.alherd.exchangeratesapp.rss
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
+import com.alherd.exchangeratesapp.ui.MainActivity.Companion.TAG
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.Observer
@@ -15,45 +17,49 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.util.concurrent.Callable
 
-
 /**
  * Created by Olgerd on 21.07.2018.
  */
 class DownLoader(c: Context, urlAddress: String) {
-
     private var c: Context = c
     private var urlAddress: String = urlAddress
     private lateinit var pd: ProgressDialog
 
-    fun connectInputStream() {
-        pd = ProgressDialog(c)
-        pd.setTitle("Fetch Articles")
-        pd.setMessage("Fetching...Please wait")
-        pd.show()
+    fun downLoadInputStream() {
+        changeProgressDialog()
 
         createObservable()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object : Observer<Any> {
                     override fun onSubscribe(d: Disposable?) {
+                        Log.d(TAG, "onSubscribe: $d")
                     }
 
                     override fun onNext(value: Any?) {
                         if (value.toString().startsWith("Error")) {
                             Toast.makeText(c, value.toString(), Toast.LENGTH_SHORT).show()
                         } else {
-                            RSSParser(c, value as InputStream).execute()
+                            RSSParser(c, value as InputStream).rssParse()
                         }
                     }
 
                     override fun onError(e: Throwable?) {
+                        Log.e(TAG, "onError: ", e)
                     }
 
                     override fun onComplete() {
                         pd.dismiss()
+                        Log.d(TAG, "onComplete: ")
                     }
-
                 })
+    }
+
+    private fun changeProgressDialog() {
+        pd = ProgressDialog(c)
+        pd.setTitle("Parse RSS")
+        pd.setMessage("Parsing...Please wait")
+        pd.show()
     }
 
     private fun createObservable(): Observable<Any> {
@@ -80,7 +86,7 @@ class DownLoader(c: Context, urlAddress: String) {
             return ErrorTraker.RESPONSE_ERROR + con.responseMessage
         } catch (e: IOException) {
             e.printStackTrace()
-            return ErrorTraker.IO_ERROR
+            return ErrorTraker.CONNECTION_ERROR
         }
     }
 }

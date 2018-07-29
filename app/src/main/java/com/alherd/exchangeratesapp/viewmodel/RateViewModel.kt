@@ -6,7 +6,7 @@ import com.alherd.exchangeratesapp.model.Rate
 /**
  * Created by Olgerd on 22.07.2018.
  */
-class RateViewModel(val rate: Rate) : BaseObservable() {
+class RateViewModel(rate: Rate) : BaseObservable() {
     private var rateModel: Rate = rate
 
     fun getName(): String {

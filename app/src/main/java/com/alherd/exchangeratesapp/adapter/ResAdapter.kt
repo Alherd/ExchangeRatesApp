@@ -35,10 +35,7 @@ class ResAdapter(c: Context, rates: ArrayList<Rate>, variableId: Int) : Recycler
     }
 
     class ResHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val binding: ViewDataBinding
+        val binding: ViewDataBinding = DataBindingUtil.bind(v)!!
 
-        init {
-            binding = DataBindingUtil.bind(v)!!
-        }
     }
 }

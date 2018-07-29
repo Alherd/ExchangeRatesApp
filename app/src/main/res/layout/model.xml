@@ -5,8 +5,8 @@
     <data>
 
         <variable
-            name="rate"
-            type="com.alherd.exchangeratesapp.model.Rate"/>
+            name="rateviewmodel"
+            type="com.alherd.exchangeratesapp.viewmodel.RateViewModel"/>
     </data>
 
     <LinearLayout
@@ -17,7 +17,7 @@
             android:id="@+id/name_rate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{rate.name}"
+            android:text="@{rateviewmodel.getName()}"
             />
     </LinearLayout>
 

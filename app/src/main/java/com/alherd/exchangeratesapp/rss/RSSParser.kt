@@ -42,7 +42,7 @@ class RSSParser(c: Context, inputStream: InputStream, lv: ContentMainBinding) : 
         super.onPostExecute(result)
         pd.dismiss()
         if (result) {
-            val resAdapter = ResAdapter(c, mRates, BR.rate)
+            val resAdapter = ResAdapter(c, mRates, BR.rateviewmodel)
 
             lv.recycler.adapter = resAdapter
             resAdapter.notifyDataSetChanged()

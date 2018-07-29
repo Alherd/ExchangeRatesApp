@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.alherd.exchangeratesapp.R
 import com.alherd.exchangeratesapp.model.Rate
+import com.alherd.exchangeratesapp.viewmodel.RateViewModel
 
 /**
  * Created by Olgerd on 22.07.2018.
@@ -19,8 +20,9 @@ class ResAdapter(c: Context, rates: ArrayList<Rate>, variableId: Int) : Recycler
     private var variableId: Int = variableId
 
     override fun onBindViewHolder(holder: ResHolder, position: Int) {
-        val a: Rate = mRates.get(position)
-        holder.binding.setVariable(variableId, a)
+        val rate: Rate = mRates.get(position)
+        val rateViewModel = RateViewModel(rate)
+        holder.binding.setVariable(variableId, rateViewModel)
     }
 
     override fun getItemCount(): Int {

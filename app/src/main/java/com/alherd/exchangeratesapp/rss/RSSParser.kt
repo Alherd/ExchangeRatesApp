@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.os.AsyncTask
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.widget.Toast
@@ -12,7 +11,7 @@ import com.alherd.exchangeratesapp.BR
 import com.alherd.exchangeratesapp.R
 import com.alherd.exchangeratesapp.adapter.ResAdapter
 import com.alherd.exchangeratesapp.databinding.ContentMainBinding
-import com.alherd.exchangeratesapp.model.Rate
+import com.alherd.exchangeratesapp.model.Currency
 import com.alherd.exchangeratesapp.ui.MainActivity
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
@@ -35,10 +34,10 @@ class RSSParser(c: Context, inputStream: InputStream) {
     private var inputStream: InputStream = inputStream
 
     private lateinit var pd: ProgressDialog
-    private var mRates: ArrayList<Rate> = ArrayList<Rate>()
+    private var mCurrencies: ArrayList<Currency> = ArrayList<Currency>()
 
     fun rssParse() {
-       changeProgressDialog()
+        changeProgressDialog()
 
         createObservable()
                 .subscribeOn(Schedulers.io())
@@ -64,12 +63,13 @@ class RSSParser(c: Context, inputStream: InputStream) {
                 })
     }
 
-    private fun changeProgressDialog(){
+    private fun changeProgressDialog() {
         pd = ProgressDialog(c)
         pd.setTitle("Parse RSS")
         pd.setMessage("Parsing...Please wait")
         pd.show()
     }
+
     private fun createObservable(): Observable<Boolean> {
         return Observable.defer(object : Callable<ObservableSource<Boolean>> {
             override fun call(): ObservableSource<Boolean>? {
@@ -80,7 +80,7 @@ class RSSParser(c: Context, inputStream: InputStream) {
 
     private fun getAdapter(result: Boolean) {
         if (result) {
-            val resAdapter = ResAdapter(c, mRates, BR.rateviewmodel)
+            val resAdapter = ResAdapter(c, mCurrencies, BR.currencyviewmodel)
             val linearLayoutManager = LinearLayoutManager(c)
             val contentMainBinding: ContentMainBinding = DataBindingUtil.setContentView(c as Activity?, R.layout.content_main)
             contentMainBinding.recycler.layoutManager = linearLayoutManager
@@ -103,8 +103,8 @@ class RSSParser(c: Context, inputStream: InputStream) {
             var tagValue: String? = null
             var isSiteMeta: Boolean = true
 
-            mRates.clear()
-            var rate: Rate? = Rate()
+            mCurrencies.clear()
+            var currency: Currency? = Currency()
 
             do {
                 var tagname: String? = parser.name
@@ -112,7 +112,7 @@ class RSSParser(c: Context, inputStream: InputStream) {
                 when (event) {
                     XmlPullParser.START_TAG ->
                         if (tagname.equals("Currency")) {
-                            rate = Rate()
+                            currency = Currency()
                             isSiteMeta = false
                         }
                     XmlPullParser.TEXT ->
@@ -120,13 +120,21 @@ class RSSParser(c: Context, inputStream: InputStream) {
                     XmlPullParser.END_TAG -> {
                         if (!isSiteMeta) {
                             if (tagname.equals("Name")) {
-                                rate?.name = tagValue!!
-                                //    mRates.add(rate!!);
+                                currency?.name = tagValue!!
+                            }
+                            if (tagname.equals("Scale")) {
+                                currency?.scale = tagValue!!
+                            }
+                            if (tagname.equals("Rate")) {
+                                currency?.rate = tagValue!!
+                            }
+                            if (tagname.equals("CharCode")) {
+                                currency?.charCode = tagValue!!
                             }
                         }
                         if (tagname.equals("Currency")) {
-                            mRates.add(rate!!);
-                            isSiteMeta = true;
+                            mCurrencies.add(currency!!)
+                            isSiteMeta = true
                         }
                     }
 

@@ -1,11 +1,8 @@
 package com.alherd.exchangeratesapp.ui
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import com.alherd.exchangeratesapp.R
-import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import com.alherd.exchangeratesapp.rss.DownLoader
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_main)
 
-        DownLoader(this, URL_ADDRESS).execute()
+        DownLoader(this, URL_ADDRESS).connectInputStream()
 
     }
 

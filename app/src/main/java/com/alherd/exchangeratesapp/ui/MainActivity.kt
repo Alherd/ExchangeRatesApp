@@ -16,10 +16,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.content_main)
-        val linearLayoutManager = LinearLayoutManager(this)
-        val contentMainBinding: ContentMainBinding = DataBindingUtil.setContentView(this, R.layout.content_main)
-        contentMainBinding.recycler.layoutManager = linearLayoutManager
-        DownLoader(this, URL_ADDRESS, contentMainBinding).execute()
+
+        DownLoader(this, URL_ADDRESS).execute()
 
     }
 

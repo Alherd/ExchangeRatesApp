@@ -13,6 +13,7 @@ import com.alherd.exchangeratesapp.adapter.ResAdapter
 import com.alherd.exchangeratesapp.databinding.ContentMainBinding
 import com.alherd.exchangeratesapp.model.Currency
 import com.alherd.exchangeratesapp.ui.MainActivity
+import com.alherd.exchangeratesapp.viewmodel.DateViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableSource
 import io.reactivex.Observer
@@ -23,6 +24,8 @@ import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserException
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.InputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.Callable
 
 /**
@@ -86,6 +89,10 @@ class RSSParser(c: Context, inputStream: InputStream) {
             contentMainBinding.recycler.layoutManager = linearLayoutManager
             contentMainBinding.recycler.adapter = resAdapter
             resAdapter.notifyDataSetChanged()
+
+            val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy")
+            val dateViewModel: DateViewModel = DateViewModel(simpleDateFormat.format(Date()))
+            contentMainBinding.dateviewmodel = dateViewModel
         } else {
             Toast.makeText(c, "Unable to parse", Toast.LENGTH_SHORT).show()
         }

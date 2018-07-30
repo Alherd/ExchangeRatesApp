@@ -8,6 +8,4 @@ class Currency {
     lateinit var scale: String
     lateinit var rate: String
     lateinit var charCode: String
-
-//    internal lateinit var rate: String
 }

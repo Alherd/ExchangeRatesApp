@@ -10,6 +10,18 @@ class CurrencyViewModel(currency: Currency) : BaseObservable() {
     private var currencyModel: Currency = currency
 
     fun getName(): String {
+        if (currencyModel.name.length > 20) run {
+            val charNameArray: CharArray = currencyModel.name.toCharArray()
+            val stringBuilder: StringBuilder = StringBuilder()
+            for (i in charNameArray.indices) {
+                stringBuilder.append(charNameArray[i])
+                if (stringBuilder.length > 20) {
+                    break
+                }
+            }
+            stringBuilder.append("...")
+            return stringBuilder.toString()
+        }
         return currencyModel.name
     }
 

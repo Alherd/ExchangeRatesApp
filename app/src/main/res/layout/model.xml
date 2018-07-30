@@ -11,11 +11,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/charcode_currency"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:text="@{currencyviewmodel.getCharCode()}"
             android:textSize="20dp" />
@@ -24,7 +25,7 @@
             android:id="@+id/scale_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            contentPaddingLeft="50dp"
             android:text="@{currencyviewmodel.getScale()}" />
 
         <TextView
